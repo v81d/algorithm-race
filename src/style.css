@@ -1,0 +1,12 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
+html,
+body,
+#app {
+  @apply w-full h-full p-0 m-0;
+}
+
+#app {
+  @apply overflow-hidden;
+}
