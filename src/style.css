@@ -1,5 +1,8 @@
 @import "tailwindcss";
-@plugin "daisyui";
+@import "@fontsource/outfit";
+@plugin "daisyui" {
+  themes: all;
+}
 
 html,
 body,
@@ -8,5 +11,5 @@ body,
 }
 
 #app {
-  @apply overflow-hidden;
+  @apply overflow-hidden font-["Outfit"];
 }
