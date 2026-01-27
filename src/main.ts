@@ -1,4 +1,5 @@
 import "./style.css";
+import Searcher from "./algorithms.ts";
 
 const app: HTMLDivElement = document.querySelector("#app")!;
 
@@ -57,10 +58,10 @@ optionsCardBody.appendChild(optionsCardInputContainer);
 const optionsCardSizeInput: HTMLInputElement = document.createElement("input");
 optionsCardSizeInput.className = "input validator w-full rounded-4xl";
 optionsCardSizeInput.type = "number";
-optionsCardSizeInput.placeholder = "Enter a size from 1,000 to 1,000,000";
+optionsCardSizeInput.placeholder = "Enter a size from 1,000 to 100,000,000";
 optionsCardSizeInput.min = "1000";
-optionsCardSizeInput.max = "1000000";
-optionsCardSizeInput.title = "Must be between 1,000 and 1,000,000";
+optionsCardSizeInput.max = "100000000";
+optionsCardSizeInput.title = "Must be between 1,000 and 100,000,000";
 optionsCardInputContainer.appendChild(optionsCardSizeInput);
 
 const optionsCardTargetInput: HTMLInputElement =
@@ -69,7 +70,7 @@ optionsCardTargetInput.className = "input validator w-full rounded-4xl";
 optionsCardTargetInput.type = "number";
 optionsCardTargetInput.placeholder = "Enter the number to search for";
 optionsCardTargetInput.min = "1";
-optionsCardTargetInput.max = "1000000";
+optionsCardTargetInput.max = "1000000000";
 optionsCardTargetInput.title = "Must be between 1 and the size";
 optionsCardInputContainer.appendChild(optionsCardTargetInput);
 
@@ -108,6 +109,30 @@ const optionsCardCompareButton: HTMLButtonElement =
   document.createElement("button");
 optionsCardCompareButton.className = "btn btn-primary rounded-4xl";
 optionsCardCompareButton.textContent = "Compare";
+optionsCardCompareButton.addEventListener("click", () => {
+  let size: number = optionsCardSizeInput.valueAsNumber;
+  let target: number = optionsCardTargetInput.valueAsNumber;
+
+  if (
+    optionsCardSizeInput.value.length === 0 ||
+    optionsCardTargetInput.value.length === 0
+  ) {
+    alert("Please input a size and target number.");
+    return;
+  }
+
+  if (size < 1000 || size > 100000000) {
+    alert("Please input a size between 1,000 and 100,000,000.");
+    return;
+  }
+
+  if (target > size) {
+    alert("The target number must not be greater than the size.");
+    return;
+  }
+
+  compare(size, target);
+});
 optionsCardButtonContainer.appendChild(optionsCardCompareButton);
 
 // Card to see results
@@ -132,5 +157,17 @@ resultsCardHeadingContainer.appendChild(resultsCardTitle);
 
 const resultsCardSubtitle: HTMLParagraphElement = document.createElement("p");
 resultsCardSubtitle.textContent =
-  "Below are the results of your algorithm comparison. For smaller inputs, the differences are probably miniscule or invisible, but larger inputs will see more obvious differences.";
+  "Below are the results of your algorithm comparison. For smaller inputs, the differences are probably miniscule or invisible, but larger inputs will see more obvious differences. The input array is generated using all integers from 1 to the inputted size.";
 resultsCardHeadingContainer.appendChild(resultsCardSubtitle);
+
+function compare(size: number, target: number) {
+  let input: number[] = Array.from(
+    { length: size },
+    (_, idx: number) => idx + 1,
+  );
+
+  let searcher: Searcher = new Searcher(input, target);
+
+  console.log(searcher.linearSearch());
+  console.log(searcher.binarySearch());
+}
