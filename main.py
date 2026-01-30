@@ -100,22 +100,31 @@ def main():
                     "Linear Search",
                     linear_search_result["position"],
                     linear_search_result["iterations"],
+                    "O(n)",
                     f"{linear_search_result['time'] * 1000} ms",
                 ],
                 [
                     "Binary Search",
                     binary_search_result["position"],
                     binary_search_result["iterations"],
+                    "O(log n)",
                     f"{binary_search_result['time'] * 1000} ms",
                 ],
                 [
                     "Jump Search",
                     jump_search_result["position"],
                     jump_search_result["iterations"],
+                    "O(√n)",
                     f"{jump_search_result['time'] * 1000} ms",
                 ],
             ],
-            headers=["Algorithm", "Position", "Iterations", "Time"],
+            headers=[
+                "Algorithm",
+                "Position of Target",
+                "Iterations",
+                "Time Complexity",
+                "Time Elapsed",
+            ],
             tablefmt="rounded_grid",
         )
     )
