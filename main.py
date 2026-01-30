@@ -4,14 +4,16 @@ import time
 from tabulate import tabulate
 
 
-def linear_search(size: int, target: int) -> dict[str, int | float] | None:
+def linear_search(
+    nums: list[int], size: int, target: int
+) -> dict[str, int | float] | None:
     start: float = time.perf_counter()
     iterations: int = 0
 
     for i in range(size):
         iterations += 1
 
-        if i + 1 == target:
+        if nums[i] == target:
             return {
                 "position": i,
                 "iterations": iterations,
@@ -19,7 +21,9 @@ def linear_search(size: int, target: int) -> dict[str, int | float] | None:
             }
 
 
-def binary_search(size: int, target: int) -> dict[str, int | float] | None:
+def binary_search(
+    nums: list[int], size: int, target: int
+) -> dict[str, int | float] | None:
     start: float = time.perf_counter()
     iterations: int = 0
 
@@ -31,20 +35,22 @@ def binary_search(size: int, target: int) -> dict[str, int | float] | None:
 
         mid: int = left + (right - left) // 2
 
-        if mid + 1 == target:
+        if nums[mid] == target:
             return {
                 "position": mid,
                 "iterations": iterations,
                 "time": time.perf_counter() - start,
             }
 
-        if mid + 1 < target:
+        if nums[mid] < target:
             left = mid + 1
         else:
             right = mid - 1
 
 
-def jump_search(size: int, target: int) -> dict[str, int | float] | None:
+def jump_search(
+    nums: list[int], size: int, target: int
+) -> dict[str, int | float] | None:
     start: float = time.perf_counter()
     iterations: int = 0
 
@@ -52,16 +58,15 @@ def jump_search(size: int, target: int) -> dict[str, int | float] | None:
     step: int = step_size
     previous: int = 0
 
-    while previous < size and step <= size and step < target:
+    while step < size and nums[step - 1] < target:
         iterations += 1
-
         previous = step
         step += step_size
 
     for i in range(previous, min(step, size)):
         iterations += 1
 
-        if i + 1 == target:
+        if nums[i] == target:
             return {
                 "position": i,
                 "iterations": iterations,
@@ -70,14 +75,6 @@ def jump_search(size: int, target: int) -> dict[str, int | float] | None:
 
 
 def main():
-    print(
-        "This program compares the speed and efficiency of three search algorithms: linear, binary, and jump search."
-    )
-    print(
-        "The algorithms search through a range of numbers from 1 to the given size until the target number is found."
-    )
-    print()
-
     size: int = int(input("Enter the input size as a positive integer: "))
     target: int = int(input("Enter the number to search for: "))
 
@@ -87,11 +84,18 @@ def main():
     if target > size:
         raise ValueError("The target number must not be greater than the size.")
 
-    linear_search_result: dict[str, int | float] | None = linear_search(size, target)
-    binary_search_result: dict[str, int | float] | None = binary_search(size, target)
-    jump_search_result: dict[str, int | float] | None = jump_search(size, target)
+    nums: list[int] = list(range(1, size + 1))
 
-    print()
+    linear_search_result: dict[str, int | float] | None = linear_search(
+        nums, size, target
+    )
+    binary_search_result: dict[str, int | float] | None = binary_search(
+        nums, size, target
+    )
+    jump_search_result: dict[str, int | float] | None = jump_search(nums, size, target)
+
+    if None in [linear_search_result, binary_search_result, jump_search_result]:
+        raise Exception("The target was not found.")
 
     print(
         tabulate(
