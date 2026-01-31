@@ -1,6 +1,13 @@
+# Built-in math library for `math.floor` and `math.sqrt`
+# https://docs.python.org/3/library/math.html
 import math
+
+# Built-in time library for `time.perf_counter`
+# https://docs.python.org/3/library/math.html
 import time
 
+# External library to create tables in the terminal interface
+# https://pypi.org/project/tabulate/
 from tabulate import tabulate
 
 
@@ -10,10 +17,11 @@ def linear_search(
     start: float = time.perf_counter()
     iterations: int = 0
 
+    # Iterate over the list until the target number is found at a position
     for i in range(size):
         iterations += 1
 
-        if nums[i] == target:
+        if nums[i] == target:  # check if the number at index i is the target
             return {
                 "position": i,
                 "iterations": iterations,
@@ -33,7 +41,7 @@ def binary_search(
     while left <= right:
         iterations += 1
 
-        mid: int = left + (right - left) // 2
+        mid: int = left + (right - left) // 2  # middle number
 
         if nums[mid] == target:
             return {
@@ -42,9 +50,9 @@ def binary_search(
                 "time": time.perf_counter() - start,
             }
 
-        if nums[mid] < target:
+        if nums[mid] < target:  # move left boundary up if mid is less than the target
             left = mid + 1
-        else:
+        else:  # move right boundary down if mid is greater than the target
             right = mid - 1
 
 
@@ -58,11 +66,13 @@ def jump_search(
     step: int = step_size
     previous: int = 0
 
+    # Iterate by the step size until the value at end of block reaches or surpasses the target
     while step < size and nums[step - 1] < target:
         iterations += 1
         previous = step
         step += step_size
 
+    # Linear search through the block that contains the target
     for i in range(previous, min(step, size)):
         iterations += 1
 
@@ -84,7 +94,7 @@ def main():
     if target > size:
         raise ValueError("The target number must not be greater than the size.")
 
-    nums: list[int] = list(range(1, size + 1))
+    nums: list[int] = list(range(1, size + 1))  # list of nums from 1 to the given size
 
     linear_search_result: dict[str, int | float] | None = linear_search(
         nums, size, target
@@ -98,7 +108,7 @@ def main():
         raise Exception("The target was not found.")
 
     print(
-        tabulate(
+        tabulate(  # results in table
             [
                 [
                     "Linear Search",
